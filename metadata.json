@@ -1,0 +1,5 @@
+{
+  "name": "Aplausos - Plataforma de Reconocimiento 2",
+  "description": "Una plataforma de reconocimiento interna, interactiva y gratificante. Permite a los colaboradores reconocerse, ganar insignias compartibles, canjear recompensas con cupones PDF y seguir su progreso con dashboards dinámicos. Utiliza Google Sheets como una base de datos de solo lectura para un mantenimiento bajo y una alta eficiencia.",
+  "requestFramePermissions": []
+}

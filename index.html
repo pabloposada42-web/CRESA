@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF--8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aplausos - Plataforma de Reconocimiento</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                DEFAULT: '#4f46e5',
+                '50': '#eef2ff',
+                '100': '#e0e7ff',
+                '200': '#c7d2fe',
+                '300': '#a5b4fc',
+                '400': '#818cf8',
+                '500': '#6366f1',
+                '600': '#4f46e5',
+                '700': '#4338ca',
+                '800': '#3730a3',
+                '900': '#312e81',
+                '950': '#1e1b4b',
+              },
+              secondary: {
+                DEFAULT: '#10b981',
+                '50': '#ecfdf5',
+                '100': '#d1fae5',
+                '200': '#a7f3d0',
+                '300': '#6ee7b7',
+                '400': '#34d399',
+                '500': '#10b981',
+                '600': '#059669',
+                '700': '#047857',
+                '800': '#065f46',
+                '900': '#064e3b',
+                '950': '#022c22',
+              }
+            },
+            keyframes: {
+              'fade-in': {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              'slide-up': {
+                '0%': { transform: 'translateY(20px)', opacity: '0' },
+                '100%': { transform: 'translateY(0)', opacity: '1' },
+              },
+              'toast-in': {
+                'from': { transform: 'translateY(100%)', opacity: '0' },
+                'to': { transform: 'translateY(0)', opacity: '1' },
+              },
+              'toast-out': {
+                  'from': { transform: 'translateY(0)', opacity: '1' },
+                  'to': { transform: 'translateY(100%)', opacity: '0' },
+              },
+            },
+            animation: {
+              'fade-in': 'fade-in 0.5s ease-out',
+              'slide-up': 'slide-up 0.5s ease-out',
+              'toast-in': 'toast-in 0.3s ease-out forwards',
+              'toast-out': 'toast-out 0.3s ease-in forwards',
+            }
+          }
+        }
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.1.1",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.1/",
+    "react/": "https://esm.sh/react@^19.1.1/",
+    "recharts": "https://esm.sh/recharts@^3.1.2",
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.8.2",
+    "lucide-react": "https://esm.sh/lucide-react@^0.541.0",
+    "jspdf": "https://esm.sh/jspdf@2.5.1",
+    "html2canvas": "https://esm.sh/html2canvas@1.4.1"
+  }
+}
+</script>
+</head>
+  <body class="bg-gray-100 dark:bg-gray-900">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
