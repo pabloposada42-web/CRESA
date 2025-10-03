@@ -3,7 +3,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGri
 
 interface ChartData {
   name: string;
-  aplausos: number;
+  millas_extra: number;
 }
 
 interface ApplauseChartProps {
@@ -16,7 +16,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     return (
       <div className="bg-gray-800/80 p-3 rounded-lg border border-gray-600/50 text-white shadow-lg">
         <p className="font-bold text-base">{`${label}`}</p>
-        <p className="text-sm">{`Total de Aplausos: ${payload[0].value}`}</p>
+        <p className="text-sm">{`Total de Millas Extra: ${payload[0].value}`}</p>
       </div>
     );
   }
@@ -28,7 +28,7 @@ const ApplauseChart: React.FC<ApplauseChartProps> = ({ data }) => {
   if (!data || data.length === 0) {
     return (
       <div className="flex items-center justify-center h-[300px] text-gray-500 dark:text-gray-400">
-        <p>Aún no hay datos de aplausos para mostrar.</p>
+        <p>Aún no hay datos de Millas Extra para mostrar.</p>
       </div>
     );
   }
@@ -65,7 +65,7 @@ const ApplauseChart: React.FC<ApplauseChartProps> = ({ data }) => {
           />
           <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(79, 70, 229, 0.1)' }}/>
           <Bar 
-            dataKey="aplausos" 
+            dataKey="millas_extra" 
             fill="url(#applauseGradient)" 
             radius={[4, 4, 0, 0]} 
             isAnimationActive={false} // Desactivamos la animación

@@ -43,7 +43,7 @@ const PrinciplesChart: React.FC<PrinciplesChartProps> = ({ applause }) => {
   }, [applause]);
 
   if(chartData.length === 0) {
-      return <div className="flex items-center justify-center h-full"><p className="text-gray-500">No hay datos de aplausos para mostrar.</p></div>
+      return <div className="flex items-center justify-center h-full"><p className="text-gray-500">No hay datos de Millas Extra para mostrar.</p></div>
   }
 
   return (

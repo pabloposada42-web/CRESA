@@ -27,11 +27,11 @@ const Marketplace: React.FC = () => {
   if (!user) return null;
 
   const receivedApplauseCount = applause.filter(a => a.receptor_id === user.usuario_id).length;
-  const userLevel = getUserLevel(receivedApplauseCount);
   
-  // Lógica de Puntos Netos
+  // Lógica de Puntos Netos y Nivel
   const userRedemptions = useMemo(() => redemptions.filter(r => r.usuario_id === user.usuario_id), [redemptions, user.usuario_id]);
-  const grossPoints = calculateGrossPoints(receivedApplauseCount);
+  const grossPoints = calculateGrossPoints(receivedApplauseCount, user.puntos_anteriores);
+  const userLevel = getUserLevel(grossPoints);
   const netPoints = calculateNetPoints(grossPoints, userRedemptions, rewards);
   
   // Lógica de inventario: Calculamos el stock disponible para cada recompensa.
@@ -84,7 +84,7 @@ const Marketplace: React.FC = () => {
     doc.rect(0, 0, 210, 40, 'F');
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(22);
-    doc.text("Cupón de Canje - Aplausos CRESA", 105, 25, { align: 'center' });
+    doc.text("Cupón de Canje - Milla Extra CRESA", 105, 25, { align: 'center' });
 
     doc.setTextColor(0, 0, 0);
     doc.setFontSize(14);
@@ -170,7 +170,9 @@ const Marketplace: React.FC = () => {
   }, [rewardsWithStock, levelFilter]);
 
   const availableLevels = useMemo(() => {
-    return [...new Set(rewards.map(r => r.nivel_requerido))].sort((a,b) => parseInt(a) - parseInt(b));
+    // FIX: Use Array.from for better type inference to resolve 'unknown' type error in sort comparison. Also, add radix to parseInt.
+    // FIX: Explicitly cast sort parameters to string to handle 'unknown' type inference issue.
+    return Array.from(new Set(rewards.map(r => r.nivel_requerido))).sort((a,b) => parseInt(String(a), 10) - parseInt(String(b), 10));
   }, [rewards]);
 
   return (

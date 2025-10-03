@@ -40,7 +40,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ users, applause, currentUser 
         const receivedApplauseCount = applause.filter(a => a.receptor_id === user.usuario_id).length;
         return {
           ...user,
-          points: calculateGrossPoints(receivedApplauseCount),
+          points: calculateGrossPoints(receivedApplauseCount, user.puntos_anteriores),
         };
       })
       // Ordenamos los usuarios por puntos, de mayor a menor.

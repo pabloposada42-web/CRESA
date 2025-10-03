@@ -13,13 +13,15 @@ import { LEVELS, POINTS_PER_APPLAUSE } from '../constants'; // Importamos las re
 import type { Redemption, Reward } from '../types'; // Importamos tipos para el cálculo de puntos netos.
 
 /**
- * Calcula el total de puntos BRUTOS de un usuario basado en la cantidad de aplausos que ha recibido.
- * Este valor representa el total de reconocimiento acumulado.
- * @param applauseCount El número de aplausos recibidos.
+ * Calcula el total de puntos BRUTOS de un usuario, combinando los aplausos recibidos
+ * con cualquier punto histórico que pueda tener de una plataforma anterior.
+ * @param applauseCount El número de aplausos recibidos en la plataforma actual.
+ * @param historicalPoints Los puntos que el usuario tenía previamente. Por defecto es 0.
  * @returns El total de puntos brutos.
  */
-export const calculateGrossPoints = (applauseCount: number): number => {
-  return applauseCount * POINTS_PER_APPLAUSE;
+export const calculateGrossPoints = (applauseCount: number, historicalPoints: number = 0): number => {
+  const newPoints = applauseCount * POINTS_PER_APPLAUSE;
+  return newPoints + historicalPoints;
 };
 
 /**
@@ -55,20 +57,20 @@ export const calculateNetPoints = (
 };
 
 /**
- * Determina el nivel actual de un usuario según la cantidad de aplausos recibidos.
+ * Determina el nivel actual de un usuario según su total de puntos.
  * Recorre la lista de niveles y devuelve el nivel más alto que el usuario ha alcanzado.
- * @param applauseCount El número de aplausos recibidos.
+ * @param totalPoints El número total de puntos del usuario.
  * @returns Un objeto con la información del nivel actual del usuario.
  */
-export const getUserLevel = (applauseCount: number) => {
+export const getUserLevel = (totalPoints: number) => {
   let currentLevel = LEVELS[0]; // Empezamos asumiendo que el usuario está en el nivel más bajo.
   // Recorremos todos los niveles definidos en `constants`.
   for (const level of LEVELS) {
-    if (applauseCount >= level.requiredApplause) {
-      // Si el usuario tiene suficientes aplausos para este nivel, lo actualizamos.
+    if (totalPoints >= level.requiredPoints) {
+      // Si el usuario tiene suficientes puntos para este nivel, lo actualizamos.
       currentLevel = level;
     } else {
-      // Si no tiene suficientes aplausos para el nivel actual, significa que no
+      // Si no tiene suficientes puntos para el nivel actual, significa que no
       // alcanzará los siguientes, así que podemos detener la búsqueda.
       break;
     }
@@ -88,12 +90,12 @@ export const getNextLevelInfo = (currentLevel: number) => {
 };
 
 /**
- * Calcula el progreso del usuario hacia el siguiente nivel.
- * @param applauseCount El número de aplausos recibidos por el usuario.
- * @returns Un objeto con el porcentaje de progreso, cuántos aplausos faltan y el nombre del siguiente nivel.
+ * Calcula el progreso del usuario hacia el siguiente nivel basado en puntos.
+ * @param totalPoints El número total de puntos del usuario.
+ * @returns Un objeto con el porcentaje de progreso, cuántos puntos faltan y el nombre del siguiente nivel.
  */
-export const getProgressToNextLevel = (applauseCount: number) => {
-  const currentLevelInfo = getUserLevel(applauseCount);
+export const getProgressToNextLevel = (totalPoints: number) => {
+  const currentLevelInfo = getUserLevel(totalPoints);
   const nextLevelInfo = getNextLevelInfo(currentLevelInfo.level);
 
   // Si no hay un siguiente nivel, significa que el usuario ha llegado al máximo.
@@ -105,14 +107,10 @@ export const getProgressToNextLevel = (applauseCount: number) => {
     };
   }
 
-  // Calculamos cuántos aplausos ha conseguido el usuario DESDE que alcanzó su nivel actual.
-  const applauseInCurrentLevel = applauseCount - currentLevelInfo.requiredApplause;
-  // Calculamos cuántos aplausos se necesitan en total para pasar del nivel actual al siguiente.
-  const applauseForNextLevel = nextLevelInfo.requiredApplause - currentLevelInfo.requiredApplause;
-  // Calculamos el progreso como un porcentaje.
-  const progressPercentage = (applauseInCurrentLevel / applauseForNextLevel) * 100;
-  // Calculamos cuántos aplausos le faltan.
-  const needed = nextLevelInfo.requiredApplause - applauseCount;
+  const pointsInCurrentLevel = totalPoints - currentLevelInfo.requiredPoints;
+  const pointsForNextLevel = nextLevelInfo.requiredPoints - currentLevelInfo.requiredPoints;
+  const progressPercentage = pointsForNextLevel > 0 ? (pointsInCurrentLevel / pointsForNextLevel) * 100 : 100;
+  const needed = nextLevelInfo.requiredPoints - totalPoints;
 
   return {
     progressPercentage,

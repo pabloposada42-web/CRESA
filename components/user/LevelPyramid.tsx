@@ -4,12 +4,12 @@ import { getUserLevel, getProgressToNextLevel } from '../../utils/levelUtils';
 import { Star } from 'lucide-react';
 
 interface LevelPyramidProps {
-  applauseCount: number;
+  totalPoints: number;
 }
 
-const LevelPyramid: React.FC<LevelPyramidProps> = ({ applauseCount }) => {
-  const userLevelInfo = getUserLevel(applauseCount);
-  const progressInfo = getProgressToNextLevel(applauseCount);
+const LevelPyramid: React.FC<LevelPyramidProps> = ({ totalPoints }) => {
+  const userLevelInfo = getUserLevel(totalPoints);
+  const progressInfo = getProgressToNextLevel(totalPoints);
 
   // Excluimos el nivel 0 y los ordenamos de MENOR a MAYOR para dibujar la pirámide de abajo hacia arriba.
   const pyramidLevels = LEVELS.filter(l => l.level > 0);
@@ -72,7 +72,7 @@ const LevelPyramid: React.FC<LevelPyramidProps> = ({ applauseCount }) => {
       </div>
       <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-4">
         {progressInfo.needed > 0
-          ? `Faltan ${progressInfo.needed} aplausos para alcanzar el nivel de ${progressInfo.nextLevelName}.`
+          ? `Faltan ${progressInfo.needed} Millas Extra para alcanzar el nivel de ${progressInfo.nextLevelName}.`
           : '¡Felicidades! Has alcanzado el nivel máximo.'}
       </p>
     </div>

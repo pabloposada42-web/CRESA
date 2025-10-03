@@ -19,6 +19,7 @@ export interface User {
   rol: 'colaborador' | 'otorgador' | 'admin'; // El tipo de permisos que tiene.
   clave_hash: string;   // Un valor que simula la contraseña para el login.
   fecha_creacion: string; // Cuándo se creó el usuario.
+  puntos_anteriores?: number; // Puntos heredados de la plataforma anterior.
 }
 
 // Define la estructura de un objeto de Aplauso.

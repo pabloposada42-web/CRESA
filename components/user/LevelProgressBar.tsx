@@ -43,7 +43,7 @@ const LevelProgressBar: React.FC<LevelProgressBarProps> = ({ applauseCount }) =>
       {/* Un pequeño texto que indica cuántos aplausos faltan para el siguiente nivel. */}
       <p className="text-right text-xs text-gray-500 dark:text-gray-400 mt-1">
         {progressInfo.needed > 0
-          ? `Faltan ${progressInfo.needed} aplausos para el siguiente nivel.`
+          ? `Faltan ${progressInfo.needed} Millas Extra para el siguiente nivel.`
           : '¡Has alcanzado el nivel máximo!'}
       </p>
     </div>

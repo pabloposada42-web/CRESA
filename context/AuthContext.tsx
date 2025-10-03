@@ -56,7 +56,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         newNotifications.push({
           id: `applause-${a.aplauso_id}`,
           type: 'applause',
-          message: `Recibiste un aplauso de ${sender?.nombre || 'alguien'}.`,
+          message: `Recibiste una Milla Extra de ${sender?.nombre || 'alguien'}.`,
           date: a.fecha,
           read: false,
           relatedId: a.aplauso_id,

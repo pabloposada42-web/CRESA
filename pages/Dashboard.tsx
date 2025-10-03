@@ -23,6 +23,8 @@ import Leaderboard from '../components/user/Leaderboard';
 import { Award, Send, Sparkles } from 'lucide-react';
 import { useAnimatedCounter } from '../hooks/useAnimatedCounter';
 import { SHAREPOINT_FORM_URL } from '../config';
+import { POINTS_PER_APPLAUSE } from '../constants'; // Importar la constante de puntos
+import { calculateGrossPoints } from '../utils/levelUtils';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -31,11 +33,12 @@ const Dashboard: React.FC = () => {
   if (!user) return null;
 
   const receivedApplause = applause.filter(a => a.receptor_id === user.usuario_id);
+  const grossPoints = calculateGrossPoints(receivedApplause.length, user.puntos_anteriores);
   const givenApplause = applause.filter(a => a.otorgante_id === user.usuario_id);
 
-  // Usamos el hook de contador animado para las estadísticas.
-  const animatedReceived = useAnimatedCounter(receivedApplause.length, 1500);
-  const animatedGiven = useAnimatedCounter(givenApplause.length, 1500);
+  // Usamos el hook de contador animado para las estadísticas, mostrando el valor en millas (puntos).
+  const animatedReceived = useAnimatedCounter(receivedApplause.length * POINTS_PER_APPLAUSE, 1500);
+  const animatedGiven = useAnimatedCounter(givenApplause.length * POINTS_PER_APPLAUSE, 1500);
   
   // Función para abrir el formulario en una nueva pestaña.
   const handleGiveApplauseClick = () => {
@@ -56,7 +59,7 @@ const Dashboard: React.FC = () => {
                 <Award className="h-6 w-6 text-secondary-600 dark:text-secondary-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Aplausos Recibidos</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Millas Extra Recibidas</p>
                 <p className="text-3xl font-bold">{animatedReceived}</p>
               </div>
             </div>
@@ -67,7 +70,7 @@ const Dashboard: React.FC = () => {
                 <Send className="h-6 w-6 text-primary-600 dark:text-primary-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Aplausos Otorgados</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Millas Extra Otorgadas</p>
                 <p className="text-3xl font-bold">{animatedGiven}</p>
               </div>
             </div>
@@ -75,7 +78,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         <Card className="p-6 animate-slide-up" style={{ animationDelay: '200ms' }}>
-          <LevelPyramid applauseCount={receivedApplause.length} />
+          <LevelPyramid totalPoints={grossPoints} />
         </Card>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -93,7 +96,7 @@ const Dashboard: React.FC = () => {
                 variant="secondary"
                 className="w-full"
               >
-                <Send className="mr-2 h-4 w-4" /> Dar un Aplauso
+                <Send className="mr-2 h-4 w-4" /> Dar una Milla Extra
               </Button>
             </Card>
           ) : (

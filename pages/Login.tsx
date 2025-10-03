@@ -38,7 +38,7 @@ const Login: React.FC = () => {
         {/* Columna Izquierda - Branding */}
         <div className="hidden md:flex w-1/2 bg-gradient-to-br from-primary-600 to-primary-800 p-12 flex-col justify-center items-center text-white text-center">
             <Award size={80} className="text-yellow-300 animate-fade-in" />
-            <h1 className="text-4xl font-bold mt-6 animate-slide-up" style={{animationDelay: '100ms'}}>Plataforma Aplausos</h1>
+            <h1 className="text-4xl font-bold mt-6 animate-slide-up" style={{animationDelay: '100ms'}}>Plataforma Milla Extra</h1>
             <p className="mt-4 text-primary-200 animate-slide-up" style={{animationDelay: '200ms'}}>
                 Donde el reconocimiento impulsa la grandeza.
             </p>

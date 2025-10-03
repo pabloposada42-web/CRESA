@@ -18,8 +18,9 @@ import { useData } from '../context/DataContext';
 import Card from '../components/common/Card';
 import BadgeGallery from '../components/user/BadgeGallery';
 import { calculateEarnedBadges } from '../utils/badgeUtils';
-import { getUserLevel, calculateGrossPoints, calculateNetPoints } from '../utils/levelUtils';
+import { getUserLevel, calculateGrossPoints, calculateNetPoints } from '../../utils/levelUtils';
 import ApplauseChart from '../components/user/ApplauseChart';
+import { POINTS_PER_APPLAUSE } from '../constants'; // Importar la constante de puntos
 
 const MyResults: React.FC = () => {
   const { user } = useAuth();
@@ -30,11 +31,11 @@ const MyResults: React.FC = () => {
   // Usamos `useMemo` para optimizar los cálculos, ya que solo se recalcularán si los datos base cambian.
   const receivedApplause = useMemo(() => applause.filter(a => a.receptor_id === user.usuario_id), [applause, user.usuario_id]);
   const earnedBadges = useMemo(() => calculateEarnedBadges(receivedApplause), [receivedApplause]);
-  const levelInfo = getUserLevel(receivedApplause.length);
-
-  // Lógica de Puntos Netos: Calculamos los puntos disponibles después de los canjes.
+  
+  // Lógica de Puntos y Nivel
+  const grossPoints = calculateGrossPoints(receivedApplause.length, user.puntos_anteriores);
+  const levelInfo = getUserLevel(grossPoints);
   const userRedemptions = useMemo(() => redemptions.filter(r => r.usuario_id === user.usuario_id), [redemptions, user.usuario_id]);
-  const grossPoints = calculateGrossPoints(receivedApplause.length);
   const netPoints = calculateNetPoints(grossPoints, userRedemptions, rewards);
 
 
@@ -57,7 +58,7 @@ const MyResults: React.FC = () => {
     });
 
     return Object.entries(months)
-      .map(([key, value]) => ({ name: value.label, aplausos: value.count, key }))
+      .map(([key, value]) => ({ name: value.label, millas_extra: value.count * POINTS_PER_APPLAUSE, key })) // Multiplicamos por 100
       .sort((a, b) => a.key.localeCompare(b.key));
   }, [receivedApplause]);
   
@@ -104,7 +105,7 @@ const MyResults: React.FC = () => {
 
       {/* Gráfico de progreso mensual */}
       <Card className="p-6">
-        <h3 className="text-xl font-bold mb-4">Progreso Mensual de Aplausos</h3>
+        <h3 className="text-xl font-bold mb-4">Progreso Mensual de Millas Extra</h3>
         <ApplauseChart data={applauseByMonth} />
       </Card>
       
@@ -116,7 +117,7 @@ const MyResults: React.FC = () => {
       {/* Historiales */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="p-6">
-          <h3 className="text-xl font-bold mb-4">Historial de Aplausos Recibidos</h3>
+          <h3 className="text-xl font-bold mb-4">Historial de Millas Extra Recibidas</h3>
           {receivedApplause.length > 0 ? (
             <ul className="space-y-3 max-h-96 overflow-y-auto pr-2">
               {receivedApplause.sort((a,b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime()).map(a => (
@@ -130,7 +131,7 @@ const MyResults: React.FC = () => {
                 </li>
               ))}
             </ul>
-          ) : (<p className="text-sm text-gray-500 dark:text-gray-400">Aún no has recibido aplausos.</p>)}
+          ) : (<p className="text-sm text-gray-500 dark:text-gray-400">Aún no has recibido Millas Extra.</p>)}
         </Card>
         <Card className="p-6">
           <h3 className="text-xl font-bold mb-4">Historial de Canjes</h3>

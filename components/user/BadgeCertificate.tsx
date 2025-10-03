@@ -68,7 +68,7 @@ const BadgeCertificate = forwardRef<HTMLDivElement, BadgeCertificateProps>(({ ba
           </p>
         </div>
         <div className="text-right">
-            <h4 className="text-3xl font-bold text-slate-200">Aplausos</h4>
+            <h4 className="text-3xl font-bold text-slate-200">Milla Extra</h4>
             <p className="text-sm text-slate-400">Plataforma de Reconocimiento Interno</p>
         </div>
       </div>

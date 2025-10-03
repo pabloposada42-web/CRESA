@@ -80,11 +80,16 @@ const transformUsers = (users: any[]): User[] => {
             assignedRole = 'otorgador';
         }
 
+        // FIX: Explicitly define properties to ensure type safety, removing the `...user` spread on `any`.
         return {
-            ...user,
+            usuario_id: String(user.usuario_id || ''),
+            nombre: String(user.nombre || ''),
+            email: String(user.email || ''),
+            clave_hash: String(user.clave_hash || ''),
             rol: assignedRole,
             estado: (user.estado || '').toLowerCase() === 'activo' ? 'activo' : 'inactivo',
-            fecha_creacion: user.fecha_creacion || new Date().toISOString()
+            fecha_creacion: user.fecha_creacion || new Date().toISOString(),
+            puntos_anteriores: Number(user.puntos_anteriores) || 0, // Lee los puntos anteriores, si no, 0.
         };
     });
 };
@@ -137,9 +142,14 @@ const parseDateString = (dateString: string): Date | null => {
 const transformApplause = (applauses: any[]): Applause[] => {
     return applauses.map(applause => {
         const parsedDate = parseDateString(applause.fecha);
+        // FIX: Explicitly define properties to ensure type safety, removing the `...applause` spread on `any`.
         return {
-            ...applause,
-            fecha: parsedDate ? parsedDate.toISOString() : applause.fecha,
+            aplauso_id: String(applause.aplauso_id || ''),
+            otorgante_id: String(applause.otorgante_id || ''),
+            receptor_id: String(applause.receptor_id || ''),
+            principio: String(applause.principio || ''),
+            motivo: String(applause.motivo || ''),
+            fecha: parsedDate ? parsedDate.toISOString() : String(applause.fecha || ''),
         };
     });
 };
@@ -148,10 +158,17 @@ const transformApplause = (applauses: any[]): Applause[] => {
  * Función de transformación para los datos de recompensas.
  * Limpia los IDs para asegurar consistencia en las comparaciones.
  */
+// FIX: The previous implementation used a spread on an `any` object, which caused type instability.
+// This new implementation explicitly creates the Reward object, ensuring all properties are correctly typed as strings.
 const transformRewards = (rewards: any[]): Reward[] => {
     return rewards.map(reward => ({
-        ...reward,
-        recompensa_id: (reward.recompensa_id || '').toString().trim(),
+        recompensa_id: String(reward.recompensa_id || '').trim(),
+        nombre: String(reward.nombre || ''),
+        descripcion: String(reward.descripcion || ''),
+        nivel_requerido: String(reward.nivel_requerido || '0'),
+        imagen_url: String(reward.imagen_url || ''),
+        stock: String(reward.stock || '0'),
+        puntos_costo: String(reward.puntos_costo || '0'),
     }));
 };
 
@@ -162,10 +179,19 @@ const transformRewards = (rewards: any[]): Reward[] => {
 const transformRedemptions = (redemptions: any[]): Redemption[] => {
     return redemptions.map(redemption => {
         const parsedDate = parseDateString(redemption.fecha);
+        // FIX: Explicitly define properties to ensure type safety, removing the `...redemption` spread on `any`.
         return {
-            ...redemption,
-            recompensa_id: (redemption.recompensa_id || '').toString().trim(),
-            fecha: parsedDate ? parsedDate.toISOString() : redemption.fecha,
+            canje_id: String(redemption.canje_id || ''),
+            usuario_id: String(redemption.usuario_id || ''),
+            recompensa_id: String(redemption.recompensa_id || '').trim(),
+            fecha: parsedDate ? parsedDate.toISOString() : String(redemption.fecha || ''),
+            nivel_requerido: redemption.nivel_requerido,
+            puntos_requeridos: redemption.puntos_requeridos,
+            puntos_previos: redemption.puntos_previos,
+            puntos_restantes: redemption.puntos_restantes,
+            estado: redemption.estado,
+            comprobante_pdf_url: redemption.comprobante_pdf_url,
+            observaciones: redemption.observaciones,
         };
     });
 };

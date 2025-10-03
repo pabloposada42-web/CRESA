@@ -77,7 +77,7 @@ const Header: React.FC = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center">
-              <span className="text-2xl font-bold text-primary-600 dark:text-primary-400">Aplausos</span>
+              <span className="text-2xl font-bold text-primary-600 dark:text-primary-400">Milla Extra</span>
             </Link>
             <nav className="hidden md:ml-10 md:block md:space-x-8">
               {navItems.map(item => (

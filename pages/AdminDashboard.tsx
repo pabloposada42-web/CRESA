@@ -13,28 +13,34 @@ import DataTable from '../components/admin/DataTable';
 import PrinciplesChart from '../components/admin/PrinciplesChart';
 import { useAnimatedCounter } from '../hooks/useAnimatedCounter'; // Importamos el hook de animación.
 import { Users, Award, Gift } from 'lucide-react';
+import { POINTS_PER_APPLAUSE } from '../constants'; // Importar la constante de puntos
+import { calculateGrossPoints } from '../utils/levelUtils';
 
 const AdminDashboard: React.FC = () => {
   const { users, applause, redemptions } = useData();
   
+  const totalHistoricalPoints = useMemo(() => {
+    return users.reduce((sum, user) => sum + (user.puntos_anteriores || 0), 0);
+  }, [users]);
+  
+  const totalNewPoints = applause.length * POINTS_PER_APPLAUSE;
+
   // Usamos el hook de contador animado para las estadísticas clave.
   const activeUsersCount = useAnimatedCounter(users.filter(u => u.estado === 'activo').length);
-  const totalApplauseCount = useAnimatedCounter(applause.length);
+  const totalApplauseCount = useAnimatedCounter(totalNewPoints + totalHistoricalPoints);
   const totalRedemptionsCount = useAnimatedCounter(redemptions.length);
 
-
   const topRecognized = useMemo(() => {
-    const counts: { [key: string]: number } = {};
-    applause.forEach(a => {
-      counts[a.receptor_id] = (counts[a.receptor_id] || 0) + 1;
+    const userPoints = users.map(user => {
+        const receivedCount = applause.filter(a => a.receptor_id === user.usuario_id).length;
+        const totalPoints = calculateGrossPoints(receivedCount, user.puntos_anteriores);
+        return { user, count: totalPoints };
     });
-    return Object.entries(counts)
-      .sort(([, a], [, b]) => b - a)
-      .slice(0, 5)
-      .map(([id, count]) => ({
-        user: users.find(u => u.usuario_id === id),
-        count
-      }));
+
+    return userPoints
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
+      
   }, [users, applause]);
 
   return (
@@ -55,7 +61,7 @@ const AdminDashboard: React.FC = () => {
             <div className="flex items-center space-x-4">
                 <div className="p-3 bg-primary-100 dark:bg-primary-900/50 rounded-full"><Award className="h-6 w-6 text-primary-600 dark:text-primary-400" /></div>
                 <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Total Aplausos</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Total Millas Extra</p>
                     <p className="text-3xl font-bold">{totalApplauseCount}</p>
                 </div>
             </div>
@@ -82,7 +88,7 @@ const AdminDashboard: React.FC = () => {
                 {topRecognized.map(({user, count}) => (
                     <li key={user?.usuario_id} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                         <span className="font-medium">{user?.nombre || 'Desconocido'}</span>
-                        <span className="font-bold text-primary-600 dark:text-primary-400">{count} aplausos</span>
+                        <span className="font-bold text-primary-600 dark:text-primary-400">{count} Millas Extra</span>
                     </li>
                 ))}
             </ul>
@@ -93,7 +99,7 @@ const AdminDashboard: React.FC = () => {
         <DataTable data={users} title="Gestión de Usuarios" filename="usuarios" />
       </Card>
       <Card className="p-6">
-        <DataTable data={applause} title="Gestión de Aplausos" filename="aplausos" />
+        <DataTable data={applause} title="Gestión de Millas Extra" filename="millas_extra" />
       </Card>
       <Card className="p-6">
         <DataTable data={redemptions} title="Gestión de Canjes" filename="canjes" />

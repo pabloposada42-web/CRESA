@@ -16,15 +16,15 @@ import type { Badge } from './types';
 export const POINTS_PER_APPLAUSE = 100;
 
 // Definición de Niveles: Define los diferentes niveles que un usuario puede alcanzar.
-// Cada objeto representa un nivel, su nombre y cuántos aplausos se necesitan para llegar a él.
+// Cada objeto representa un nivel, su nombre y cuántos puntos se necesitan para llegar a él.
 export const LEVELS = [
-  { level: 0, name: 'Novato', requiredApplause: 0 },
-  { level: 1, name: 'Aprendiz', requiredApplause: 2 },
-  { level: 2, name: 'Participante', requiredApplause: 4 },
-  { level: 3, name: 'Contribuidor', requiredApplause: 6 },
-  { level: 4, name: 'Mentor', requiredApplause: 8 },
-  { level: 5, name: 'Líder', requiredApplause: 10 },
-  { level: 6, name: 'Leyenda', requiredApplause: 12 },
+  { level: 0, name: 'Novato', requiredPoints: 0 },
+  { level: 1, name: 'Aprendiz', requiredPoints: 200 },
+  { level: 2, name: 'Participante', requiredPoints: 400 },
+  { level: 3, name: 'Contribuidor', requiredPoints: 600 },
+  { level: 4, name: 'Mentor', requiredPoints: 800 },
+  { level: 5, name: 'Líder', requiredPoints: 1000 },
+  { level: 6, name: 'Leyenda', requiredPoints: 1200 },
 ];
 
 // Definición de Insignias: Contiene la información de todas las insignias posibles.
