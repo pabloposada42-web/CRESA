@@ -14,10 +14,11 @@ import RewardCard from '../components/user/RewardCard';
 import ConfirmationModal from '../components/common/ConfirmationModal';
 import { getUserLevel, calculateGrossPoints, calculateNetPoints } from '../../utils/levelUtils';
 import type { Reward } from '../types';
+import { POINTS_PER_APPLAUSE } from '../constants';
 
 const Marketplace: React.FC = () => {
   const { user } = useAuth();
-  const { rewards, applause, redemptions, addRedemption } = useData();
+  const { users, rewards, applause, redemptions, addRedemption } = useData();
   const { addToast } = useToast();
   
   const [levelFilter, setLevelFilter] = useState('all');
@@ -80,6 +81,7 @@ const Marketplace: React.FC = () => {
     const redemptionCode = `CANJE-${user.usuario_id.slice(-4)}-${Date.now().toString().slice(-6)}`;
     const now = new Date();
 
+    // --- PÁGINA 1: CUPÓN DE CANJE ---
     doc.setFillColor(79, 70, 229);
     doc.rect(0, 0, 210, 40, 'F');
     doc.setTextColor(255, 255, 255);
@@ -126,8 +128,122 @@ const Marketplace: React.FC = () => {
     doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(107, 114, 128);
-    const instructions = "El colaborador debe acercarse a Trabajo Social con este documento para iniciar el proceso. Los puntos indicados se restarán de tu total posterior a la aceptación del departamento de Trabajo Social. La entrega de los obsequios se basa en el inventario existente.";
-    doc.text(instructions, 20, 197, { maxWidth: 170, lineHeightFactor: 1.5 });
+    
+    const instructions = [
+        "Presenta este documento (impreso o digital) al departamento de Trabajo Social para iniciar el proceso.",
+        "El canje está sujeto a la aprobación final por parte de tu Gerente de Área.",
+        "Recursos Humanos auditará la legitimidad de los reconocimientos que sustentan este canje.",
+        "La entrega de la recompensa final está sujeta a la disponibilidad de inventario.",
+        "Este cupón es personal, intransferible y tiene una validez de 30 días desde su emisión."
+    ];
+
+    let instructionY = 197;
+    doc.setFillColor(107, 114, 128);
+    instructions.forEach(line => {
+        doc.circle(22, instructionY - 1, 0.8, 'F');
+        const splitLine = doc.splitTextToSize(line, 165);
+        doc.text(splitLine, 26, instructionY);
+        instructionY += (splitLine.length * 4) + 3;
+    });
+
+    // --- PÁGINA 2: SOPORTE DE LEGITIMIDAD ---
+    doc.addPage();
+    doc.setFillColor(79, 70, 229);
+    doc.rect(0, 0, 210, 30, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(18);
+    doc.text("Soporte de Legitimidad del Reconocimiento", 105, 18, { align: 'center' });
+    
+    doc.setTextColor(0, 0, 0);
+    let currentY = 40;
+
+    const getUsername = (id: string) => users.find(u => u.usuario_id === id)?.nombre || 'Desconocido';
+    
+    // Puntos Históricos
+    if (user.puntos_anteriores && user.puntos_anteriores > 0) {
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text("Puntos Históricos", 20, currentY);
+        currentY += 5;
+
+        doc.setFillColor(243, 244, 246);
+        doc.roundedRect(15, currentY, 180, 20, 3, 3, 'F');
+        
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(107, 114, 128);
+        doc.text("Puntos migrados de la plataforma anterior como reconocimiento a tu trayectoria.", 20, currentY + 8);
+
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(55, 65, 81);
+        doc.text(`+${user.puntos_anteriores}`, 190, currentY + 12, { align: 'right' });
+        
+        currentY += 30;
+    }
+
+    // Últimos Reconocimientos
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(0, 0, 0);
+    doc.text("Últimos Reconocimientos Recibidos", 20, currentY);
+    currentY += 8;
+
+    const receivedApplause = applause
+        .filter(a => a.receptor_id === user.usuario_id)
+        .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
+        .slice(0, 10);
+
+    if (receivedApplause.length === 0 && (!user.puntos_anteriores || user.puntos_anteriores === 0)) {
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(107, 114, 128);
+        doc.text("No se encontraron puntos o reconocimientos recientes para mostrar.", 20, currentY);
+    } else {
+        receivedApplause.forEach((a) => {
+            if (currentY > 255) {
+                doc.addPage();
+                currentY = 20;
+            }
+
+            const giverName = getUsername(a.otorgante_id);
+            const date = new Date(a.fecha).toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' });
+            
+            doc.setDrawColor(229, 231, 235);
+            doc.setFillColor(255, 255, 255);
+            doc.roundedRect(15, currentY, 180, 28, 3, 3, 'FD');
+
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(55, 65, 81);
+            doc.text(`De: ${giverName}`, 20, currentY + 7);
+
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(107, 114, 128);
+            doc.text(`Fecha: ${date}`, 20, currentY + 12);
+            
+            doc.setFillColor(238, 242, 255);
+            const principleWidth = doc.getTextWidth(a.principio) + 4;
+            doc.roundedRect(20, currentY + 16, principleWidth, 5, 2, 2, 'F');
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(79, 70, 229);
+            doc.text(a.principio, 22, currentY + 20);
+
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(34, 197, 94);
+            doc.text(`+${POINTS_PER_APPLAUSE} pts`, 190, currentY + 9, { align: 'right' });
+            
+            currentY += 32;
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'italic');
+            doc.setTextColor(107, 114, 128);
+            const splitReason = doc.splitTextToSize(`Motivo: "${a.motivo}"`, 170);
+            doc.text(splitReason, 20, currentY);
+
+            currentY += splitReason.length * 4 + 5;
+        });
+    }
 
     doc.save(`cupon-cresa-${reward.nombre.replace(/\s+/g, '-')}.pdf`);
   };
