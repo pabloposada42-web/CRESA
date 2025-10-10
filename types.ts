@@ -14,7 +14,7 @@
 export interface User {
   usuario_id: string;   // Identificador único del usuario.
   nombre: string;       // Nombre completo.
-  email: string;        // Correo electrónico, usado para el login.
+  email: string;        // Cédula del usuario, usada para el login.
   estado: 'activo' | 'inactivo'; // Si la cuenta está activa o no.
   rol: 'colaborador' | 'otorgador' | 'admin'; // El tipo de permisos que tiene.
   clave_hash: string;   // Un valor que simula la contraseña para el login.

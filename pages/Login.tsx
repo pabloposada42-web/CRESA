@@ -16,7 +16,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Hook para redirigir al usuario a otras páginas.
 import { useAuth } from '../context/AuthContext'; // Hook para acceder a la función de login.
 import Button from '../components/common/Button';
-import { Mail, Lock, Award } from 'lucide-react';
+import { IdCard, Lock, Award } from 'lucide-react';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -55,19 +55,19 @@ const Login: React.FC = () => {
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-4">
                 <div>
-                    <label htmlFor="email-address" className="sr-only">Correo electrónico</label>
+                    <label htmlFor="cedula" className="sr-only">Cédula</label>
                     <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <Mail className="h-5 w-5 text-gray-400" />
+                            <IdCard className="h-5 w-5 text-gray-400" />
                         </div>
                         <input
-                            id="email-address"
+                            id="cedula"
                             name="email"
-                            type="email"
-                            autoComplete="email"
+                            type="text"
+                            autoComplete="username"
                             required
                             className="w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                            placeholder="Correo electrónico"
+                            placeholder="Cédula"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />

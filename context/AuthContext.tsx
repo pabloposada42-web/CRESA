@@ -107,7 +107,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setLoading(false);
       return true;
     } else {
-      setError('Correo electrónico o contraseña incorrectos.');
+      setError('Cédula o contraseña incorrectos.');
       setLoading(false);
       return false;
     }
