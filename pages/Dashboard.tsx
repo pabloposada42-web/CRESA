@@ -9,7 +9,7 @@
  * - Saludar al usuario por su nombre.
  * - Mostrar tarjetas con estadísticas clave animadas.
  * - Mostrar la pirámide de niveles del usuario.
- * - Mostrar la tabla de líderes (Leaderboard).
+ * - Mostrar información sobre cómo ganar Millas Extra.
  * - Presentar una "llamada a la acción" visualmente atractiva para dar aplausos.
  */
 
@@ -19,12 +19,12 @@ import { useData } from '../context/DataContext';
 import Card from '../components/common/Card';
 import Button from '../components/common/Button';
 import LevelPyramid from '../components/user/LevelPyramid';
-import Leaderboard from '../components/user/Leaderboard';
+import HowToEarn from '../components/user/HowToEarn';
 import { Award, Send, Sparkles } from 'lucide-react';
 import { useAnimatedCounter } from '../hooks/useAnimatedCounter';
 import { SHAREPOINT_FORM_URL } from '../config';
 import { POINTS_PER_APPLAUSE } from '../constants'; // Importar la constante de puntos
-import { calculateGrossPoints } from '../utils/levelUtils';
+import { calculateGrossPoints } from '../../utils/levelUtils';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -83,24 +83,24 @@ const Dashboard: React.FC = () => {
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 animate-slide-up" style={{ animationDelay: '300ms' }}>
-            <Leaderboard users={users} applause={applause} currentUser={user} />
+            <HowToEarn />
           </div>
           <div className="animate-slide-up" style={{ animationDelay: '400ms' }}>
           {user.rol === 'otorgador' || user.rol === 'admin' ? (
-            <Card className="p-6 bg-gradient-to-br from-primary-600 to-primary-800 text-white flex flex-col items-center text-center">
+            <Card className="p-6 bg-gradient-to-br from-primary-600 to-primary-800 text-white flex flex-col items-center text-center h-full">
               <Sparkles className="h-12 w-12 text-yellow-300" />
               <h2 className="text-2xl font-bold mt-4">Reconoce a un Colega</h2>
               <p className="mt-2 mb-6 text-primary-200">El reconocimiento impulsa la grandeza. ¿Alguien hizo un trabajo excepcional? ¡Házselo saber!</p>
               <Button
                 onClick={handleGiveApplauseClick}
                 variant="secondary"
-                className="w-full"
+                className="w-full mt-auto"
               >
                 <Send className="mr-2 h-4 w-4" /> Dar una Milla Extra
               </Button>
             </Card>
           ) : (
-            <Card className="p-6 bg-gradient-to-br from-secondary-600 to-secondary-800 text-white">
+            <Card className="p-6 bg-gradient-to-br from-secondary-600 to-secondary-800 text-white h-full">
               <h2 className="text-xl font-bold">¡Sigue así!</h2>
               <p className="mt-2">Tu trabajo está siendo notado. ¡Sigue esforzándote para ganar más reconocimientos y subir de nivel!</p>
             </Card>
