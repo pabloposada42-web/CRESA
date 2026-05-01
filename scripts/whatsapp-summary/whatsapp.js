@@ -25,10 +25,15 @@ export async function createClient(sessionDir) {
     fs.mkdirSync(sessionDir, { recursive: true });
   }
 
+  const chromePath =
+    process.env.CHROME_PATH ||
+    '/root/.cache/puppeteer/chrome/linux-146.0.7680.31/chrome-linux64/chrome';
+
   const client = new Client({
     authStrategy: new LocalAuth({ dataPath: sessionDir }),
     puppeteer: {
       headless: true,
+      executablePath: chromePath,
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
