@@ -1,0 +1,20 @@
+{
+  "name": "whatsapp-weekly-summary",
+  "version": "1.0.0",
+  "description": "Descarga mensajes del grupo WhatsApp Team AORA, genera resumen ejecutivo semanal y lo envía por email con indicador de tendencia.",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "run-now": "node index.js --run-now",
+    "setup": "node index.js --setup"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "dotenv": "^16.4.7",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.16",
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "^1.26.0"
+  }
+}

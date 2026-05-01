@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# WhatsApp summary script
+scripts/whatsapp-summary/.env
+scripts/whatsapp-summary/session/
+scripts/whatsapp-summary/node_modules/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

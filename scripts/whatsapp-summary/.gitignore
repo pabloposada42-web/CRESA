@@ -1,0 +1,11 @@
+# Variables de entorno — NUNCA subir al repo
+.env
+
+# Sesión de WhatsApp Web (contiene credenciales de la sesión)
+session/
+
+# Dependencias
+node_modules/
+
+# Logs
+*.log
