@@ -1,0 +1,66 @@
+{
+  "quarterfinals": {
+    "France vs Morocco": {
+      "France": 0.6840912772807438,
+      "Morocco": 0.3159087227192562,
+      "_draw90": 0.24015680892146418
+    },
+    "Spain vs Belgium": {
+      "Spain": 0.7384090914865208,
+      "Belgium": 0.26159090851347894,
+      "_draw90": 0.22310944453125497
+    },
+    "Norway vs England": {
+      "Norway": 0.39701700139552587,
+      "England": 0.6029829986044741,
+      "_draw90": 0.25677525867274725
+    },
+    "Argentina vs Switzerland": {
+      "Argentina": 0.7269844248831,
+      "Switzerland": 0.2730155751169004,
+      "_draw90": 0.22712316025993445
+    }
+  },
+  "monte_carlo": {
+    "reach_semifinal": {
+      "France": 0.68316,
+      "Morocco": 0.31684,
+      "Spain": 0.74058,
+      "Belgium": 0.25942,
+      "Norway": 0.3957,
+      "England": 0.6043,
+      "Argentina": 0.72386,
+      "Switzerland": 0.27614
+    },
+    "reach_final": {
+      "France": 0.3671,
+      "Morocco": 0.11376,
+      "Spain": 0.43174,
+      "Belgium": 0.0874,
+      "Norway": 0.15492,
+      "England": 0.29546,
+      "Argentina": 0.44354,
+      "Switzerland": 0.10608
+    },
+    "win_title": {
+      "France": 0.21164,
+      "Morocco": 0.04532,
+      "Spain": 0.26044,
+      "Belgium": 0.03156,
+      "Norway": 0.05564,
+      "England": 0.13194,
+      "Argentina": 0.2319,
+      "Switzerland": 0.03156
+    },
+    "third_place": {
+      "France": 0.1907,
+      "Morocco": 0.08722,
+      "Spain": 0.19614,
+      "Belgium": 0.0657,
+      "Norway": 0.09392,
+      "England": 0.15034,
+      "Argentina": 0.1576,
+      "Switzerland": 0.05838
+    }
+  }
+}

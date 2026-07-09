@@ -15,7 +15,7 @@ from backtest import wc_tournaments, score_predictions
 DATA_PATH = "data/international_results.csv"
 
 
-def run(home_adv=100.0, k_scale=1.0, carry_over=1.0, rho=-0.08):
+def run(home_adv=50.0, k_scale=1.5, carry_over=1.0, rho=-0.08):
     k_weights = {k: v * k_scale for k, v in DEFAULT_K.items()}
     matches = load_matches(DATA_PATH)
     tourn2026 = wc_tournaments(matches)[2026]
