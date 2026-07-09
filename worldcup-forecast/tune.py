@@ -67,10 +67,10 @@ def evaluate_with_rho(home_adv, k_scale, carry_over, rho, years, mode="frozen"):
 
 
 def grid_search():
-    home_advs = [30, 50, 70, 100]
-    k_scales = [1.25, 1.5, 1.75, 2.0, 2.5]
+    home_advs = [0, 10, 20, 30, 40]
+    k_scales = [2.25, 2.5, 3.0, 3.5, 4.0, 5.0]
     carry_overs = [1.0]
-    rhos = [-0.2, -0.12, -0.08, -0.04, 0.0]
+    rhos = [-0.08, -0.04, -0.02, 0.0, 0.03]
 
     best = None
     results = []
