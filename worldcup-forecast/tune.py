@@ -13,8 +13,8 @@ from elo import DEFAULT_K, load_matches
 from backtest import eval_frozen, eval_live
 from model import GoalModelParams
 
-TUNE_YEARS = (2002, 2006, 2010, 2014)
-TEST_YEARS = (2018, 2022)
+TUNE_YEARS = (2002, 2006, 2010, 2014, 2018, 2022)
+TEST_YEARS = ()  # WC2026 (live, in-progress) is used as the real untouched holdout, see eval_wc2026.py
 
 MATCHES = load_matches("data/international_results.csv")
 
@@ -67,10 +67,10 @@ def evaluate_with_rho(home_adv, k_scale, carry_over, rho, years, mode="frozen"):
 
 
 def grid_search():
-    home_advs = [0, 50, 100, 150]
-    k_scales = [0.5, 0.75, 1.0, 1.5]
-    carry_overs = [1.0, 0.95, 0.9]
-    rhos = [-0.15, -0.08, 0.0]
+    home_advs = [30, 50, 70, 100]
+    k_scales = [1.25, 1.5, 1.75, 2.0, 2.5]
+    carry_overs = [1.0]
+    rhos = [-0.2, -0.12, -0.08, -0.04, 0.0]
 
     best = None
     results = []
@@ -94,13 +94,14 @@ def grid_search():
     for e in results[:10]:
         print(e)
 
-    top = results[:5]
-    print("\nGeneralization check on held-out 2018/2022:")
-    for e in top:
-        test_res = evaluate_with_rho(e["home_adv"], e["k_scale"], e["carry_over"], e["rho"],
-                                      TEST_YEARS, mode="frozen")
-        print({**e, "test_log_loss": test_res["log_loss"], "test_brier": test_res["brier"],
-               "test_accuracy": test_res["accuracy"]})
+    if TEST_YEARS:
+        top = results[:5]
+        print("\nGeneralization check on held-out years:")
+        for e in top:
+            test_res = evaluate_with_rho(e["home_adv"], e["k_scale"], e["carry_over"], e["rho"],
+                                          TEST_YEARS, mode="frozen")
+            print({**e, "test_log_loss": test_res["log_loss"], "test_brier": test_res["brier"],
+                   "test_accuracy": test_res["accuracy"]})
 
     return results
 
